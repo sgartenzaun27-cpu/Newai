@@ -1,0 +1,530 @@
+/* Business-KI – Look: der Packtisch eines Resellers.
+   Karton als Untergrund, Antworten wie weiße Versandetiketten,
+   Beispielfragen als Preisanhänger, Senden-Knopf als Preisaufkleber. */
+
+@font-face {
+  font-family: 'Archivo Black';
+  src: url('/fonts/archivo-black.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fira Sans';
+  src: url('/fonts/fira-sans-400.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fira Sans';
+  src: url('/fonts/fira-sans-400-italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fira Sans';
+  src: url('/fonts/fira-sans-600.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --karton: #c9a47e;
+  --karton-tief: #9c7650;
+  --karton-hell: #f4ede4;
+  --etikett: #ffffff;
+  --anhaenger: #f1dda4;
+  --anhaenger-ring: #dcc27c;
+  --tinte: #2a2019;
+  --tinte-weich: #4a3828;
+  --sticker: #ff4f9a;
+
+  --display: 'Archivo Black', 'Arial Black', Impact, sans-serif;
+  --text: 'Fira Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --spalte: 680px;
+  --rand: 18px;
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--karton);
+  color: var(--tinte);
+  font: 400 17px/1.5 var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 3px solid var(--tinte);
+  outline-offset: 3px;
+}
+
+.unsichtbar {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- Rahmen */
+
+.inhalt {
+  width: 100%;
+  max-width: calc(var(--spalte) + 2 * var(--rand));
+  margin: 0 auto;
+  padding-left: max(var(--rand), env(safe-area-inset-left));
+  padding-right: max(var(--rand), env(safe-area-inset-right));
+}
+
+/* Kopf und Eingabe laufen über die volle Breite, der Inhalt sitzt in der Spalte */
+.kopf,
+.fuss {
+  width: 100%;
+  padding-left: max(var(--rand), env(safe-area-inset-left), calc((100% - var(--spalte)) / 2));
+  padding-right: max(var(--rand), env(safe-area-inset-right), calc((100% - var(--spalte)) / 2));
+}
+
+.kopf {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 60px;
+  padding-top: env(safe-area-inset-top);
+  background: var(--karton);
+}
+
+.marke {
+  font: 400 19px/1 var(--display);
+  letter-spacing: -0.01em;
+  color: var(--tinte);
+  text-decoration: none;
+}
+
+.neu {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 2px solid var(--tinte);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--tinte);
+  font: 600 15px/1 var(--text);
+  cursor: pointer;
+}
+
+.neu:active {
+  background: var(--tinte);
+  color: var(--karton);
+}
+
+.inhalt {
+  flex: 1;
+  padding-bottom: 28px;
+}
+
+/* ---------------------------------------------------------------- Startseite */
+
+.start {
+  padding-top: clamp(16px, 5vh, 56px);
+}
+
+.start h1 {
+  margin: 0;
+  max-width: 10ch;
+  font: 400 clamp(46px, 13vw, 76px) / 0.96 var(--display);
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.start-text {
+  max-width: 34ch;
+  margin: 18px 0 0;
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--tinte-weich);
+}
+
+/* Preisanhänger mit Loch und Schnur – das eine laute Element der Seite */
+.anhaenger {
+  display: grid;
+  justify-items: start;
+  gap: 14px;
+  margin: 34px 0 0;
+  padding: 0 0 0 16px;
+  list-style: none;
+}
+
+.anhaenger li {
+  position: relative;
+  max-width: 100%;
+}
+
+.anhaenger li::before {
+  /* Schnur, die durchs Loch läuft */
+  content: '';
+  position: absolute;
+  z-index: 1;
+  left: -18px;
+  top: calc(50% - 21px);
+  width: 46px;
+  height: 26px;
+  pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 26'%3E%3Cpath d='M44 21C32 4 14 1 1 8M44 21C30 13 14 13 1 18' fill='none' stroke='%23fbf6ec' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat;
+}
+
+.anhaenger li:nth-child(4n + 1) { --winkel: -1.6deg; }
+.anhaenger li:nth-child(4n + 2) { --winkel: 1deg; }
+.anhaenger li:nth-child(4n + 3) { --winkel: -0.6deg; }
+.anhaenger li:nth-child(4n + 4) { --winkel: 1.4deg; }
+
+.anhaenger button {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  min-height: 60px;
+  padding: 15px 26px 15px 52px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--anhaenger);
+  color: var(--tinte);
+  font: 600 17px/1.3 var(--text);
+  text-align: left;
+  cursor: pointer;
+  clip-path: polygon(17px 0, 100% 0, 100% 100%, 17px 100%, 0 calc(100% - 17px), 0 17px);
+  transform: rotate(var(--winkel, 0deg));
+  transform-origin: 26px 50%;
+  animation: schwingen 1100ms cubic-bezier(0.25, 1.6, 0.45, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 110ms + 120ms);
+}
+
+.anhaenger button::before {
+  /* gestanztes Loch mit Verstärkungsring */
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: var(--karton);
+  box-shadow: 0 0 0 4px var(--anhaenger-ring);
+}
+
+.anhaenger button:active {
+  transform: rotate(0deg) translateY(2px);
+}
+
+.anhaenger button:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 3px var(--tinte);
+}
+
+@keyframes schwingen {
+  from {
+    transform: rotate(-9deg);
+  }
+  to {
+    transform: rotate(var(--winkel, 0deg));
+  }
+}
+
+/* ---------------------------------------------------------------- Unterhaltung */
+
+.verlauf {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 10px;
+}
+
+.notiz {
+  align-self: flex-end;
+  max-width: 85%;
+  padding: 10px 15px;
+  border-radius: 10px 10px 3px 10px;
+  background: var(--tinte);
+  color: var(--etikett);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.antwort {
+  padding: 18px 18px 20px;
+  border-radius: 8px;
+  background: var(--etikett);
+  color: var(--tinte);
+  overflow-wrap: break-word;
+}
+
+.antwort > :first-child {
+  margin-top: 0;
+}
+.antwort > :last-child {
+  margin-bottom: 0;
+}
+
+.antwort p {
+  margin: 0 0 12px;
+}
+
+.antwort h3,
+.antwort h4,
+.antwort h5 {
+  margin: 22px 0 8px;
+  font-family: var(--display);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+}
+.antwort h3 { font-size: 20px; }
+.antwort h4 { font-size: 18px; }
+.antwort h5 { font-size: 16px; }
+
+.antwort ul,
+.antwort ol {
+  margin: 0 0 12px;
+  padding-left: 1.5em;
+}
+
+.antwort li {
+  margin: 5px 0;
+  padding-left: 3px;
+}
+
+.antwort li > ul,
+.antwort li > ol {
+  margin: 6px 0 0;
+}
+
+.antwort ol > li::marker {
+  font-family: var(--display);
+  font-size: 0.95em;
+}
+
+.antwort ul > li::marker {
+  color: var(--karton-tief);
+}
+
+.antwort strong {
+  font-weight: 600;
+}
+
+.antwort a {
+  color: var(--tinte);
+  font-weight: 600;
+  text-decoration-line: underline;
+  text-decoration-color: var(--sticker);
+  text-decoration-thickness: 3px;
+  text-decoration-skip-ink: none;
+  text-underline-offset: 3px;
+}
+
+.antwort a:active {
+  background: var(--sticker);
+}
+
+.antwort code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--karton-hell);
+  font: 0.9em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.antwort pre {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: var(--karton-hell);
+  overflow-x: auto;
+}
+
+.antwort pre code {
+  padding: 0;
+  background: none;
+}
+
+.antwort blockquote {
+  margin: 0 0 12px;
+  padding: 2px 0 2px 14px;
+  border-left: 3px solid var(--karton);
+  color: var(--tinte-weich);
+}
+
+.antwort hr {
+  margin: 18px 0;
+  border: 0;
+  border-top: 2px dashed var(--karton);
+}
+
+.antwort .tabelle {
+  margin: 0 0 12px;
+  overflow-x: auto;
+}
+
+.antwort table {
+  min-width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.antwort th,
+.antwort td {
+  padding: 7px 10px 7px 0;
+  border-bottom: 1px solid #e8ddcf;
+  text-align: left;
+  vertical-align: top;
+}
+
+.antwort th {
+  font-weight: 600;
+}
+
+.schreibt {
+  color: var(--tinte-weich);
+  font-style: italic;
+  animation: atmen 1.6s ease-in-out infinite;
+}
+
+@keyframes atmen {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.antwort.fehler p {
+  margin: 0 0 14px;
+}
+
+.nochmal {
+  min-height: 42px;
+  padding: 0 18px;
+  border: 2px solid var(--tinte);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--tinte);
+  font: 600 15px/1 var(--text);
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------------- Eingabe */
+
+.fuss {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  padding-top: 10px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  background: var(--karton);
+}
+
+.frage {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 6px 6px 6px 16px;
+  border-radius: 12px;
+  background: var(--etikett);
+  box-shadow: 0 0 0 2px var(--tinte);
+}
+
+.frage:focus-within {
+  box-shadow: 0 0 0 3px var(--tinte);
+}
+
+.frage textarea {
+  flex: 1;
+  min-width: 0;
+  max-height: 160px;
+  padding: 10px 0;
+  border: 0;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: var(--tinte);
+  font: 400 17px/1.4 var(--text);
+}
+
+.frage textarea::placeholder {
+  color: #7a6450;
+  opacity: 1;
+}
+
+.frage textarea:disabled {
+  background: transparent;
+}
+
+.senden {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--sticker);
+  color: var(--tinte);
+  cursor: pointer;
+}
+
+.senden svg {
+  width: 22px;
+  height: 22px;
+}
+
+.senden:disabled {
+  background: #ece2d4;
+  color: #8f7a65;
+  cursor: default;
+}
+
+.rest {
+  min-height: 21px;
+  margin: 8px 2px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--tinte-weich);
+}
+
+.ohne-js {
+  margin: 0;
+  padding: 18px;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anhaenger button,
+  .schreibt {
+    animation: none;
+  }
+}

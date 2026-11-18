@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Business-KI</title>
+    <meta name="description" content="Kostenlose KI für Reselling, Supplier und Shopify – Schritt für Schritt erklärt." />
+    <meta name="theme-color" content="#C9A47E" />
+    <meta property="og:title" content="Business-KI – kostenlos fragen" />
+    <meta property="og:description" content="Vintage, Sneaker, Shopify, Supplier: Schritt für Schritt erklärt." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/archivo-black.woff" as="font" type="font/woff" crossorigin />
+    <link rel="preload" href="/fonts/fira-sans-400.woff" as="font" type="font/woff" crossorigin />
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/config.js"></script>
+    <script src="/markdown.js" defer></script>
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <header class="kopf">
+      <a class="marke" href="/">Business-KI</a>
+      <button class="neu" type="button" hidden>Neuer Chat</button>
+    </header>
+
+    <main class="inhalt">
+      <section class="start" aria-labelledby="start-titel">
+        <h1 id="start-titel">Was willst du verkaufen?</h1>
+        <p class="start-text"></p>
+        <ul class="anhaenger" aria-label="Beispielfragen"></ul>
+      </section>
+
+      <div class="verlauf" role="log" aria-live="polite" aria-label="Unterhaltung"></div>
+    </main>
+
+    <footer class="fuss">
+      <form class="frage" autocomplete="off">
+        <label class="unsichtbar" for="eingabe">Deine Frage</label>
+        <textarea id="eingabe" rows="1" maxlength="2000" enterkeyhint="send" placeholder="Deine Frage …"></textarea>
+        <button class="senden" type="submit" aria-label="Frage senden" disabled></button>
+      </form>
+      <p class="rest" aria-live="polite"></p>
+    </footer>
+
+    <noscript><p class="ohne-js">Bitte aktiviere JavaScript, um die Business-KI zu nutzen.</p></noscript>
+  </body>
+</html>
