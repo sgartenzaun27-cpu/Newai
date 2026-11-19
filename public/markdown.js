@@ -79,7 +79,7 @@
       listenZu();
     };
     const listeAuf = (typ, tiefe, start) => {
-      html += typ === 'ol' && start > 1 ? `<ol start="${start}">` : `<${typ}>`;
+      html += typ === 'ol' && start > 1 ? `<ol start="${start}" style="counter-reset: schritt ${start - 1}">` : `<${typ}>`;
       listen.push({ typ, tiefe });
     };
 
@@ -163,7 +163,13 @@
         } else {
           listeAuf(typ, tiefe, start);
         }
-        html += `<li>${inline(punkt[3])}`;
+        const aufgabe = punkt[3].match(/^\[( |x|X)\]\s+(.*)$/);
+        if (aufgabe) {
+          const an = aufgabe[1] !== ' ';
+          html += `<li class="aufgabe-statisch${an ? ' an' : ''}"><span class="kaestchen" aria-hidden="true"></span>${inline(aufgabe[2])}`;
+        } else {
+          html += `<li>${inline(punkt[3])}`;
+        }
         leerDavor = false;
         continue;
       }
@@ -185,4 +191,5 @@
   }
 
   global.renderMarkdown = renderMarkdown;
+  global.renderInline = inline;
 })(typeof window !== 'undefined' ? window : globalThis);

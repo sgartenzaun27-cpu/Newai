@@ -50,7 +50,11 @@ test('Listen: nummeriert, Fortsetzung, verschachtelt, Startnummer', () => {
     md('1. **Eins**\n   Erklärung\n   - Unterpunkt\n2. Zwei'),
     '<ol><li><strong>Eins</strong><br>Erklärung<ul><li>Unterpunkt</li></ul></li><li>Zwei</li></ol>',
   );
-  assert.equal(md('3. Drei\n4. Vier'), '<ol start="3"><li>Drei</li><li>Vier</li></ol>');
+  assert.equal(md('3. Drei\n4. Vier'), '<ol start="3" style="counter-reset: schritt 2"><li>Drei</li><li>Vier</li></ol>');
+  assert.equal(
+    md('- [ ] offen\n- [x] fertig'),
+    '<ul><li class="aufgabe-statisch"><span class="kaestchen" aria-hidden="true"></span>offen</li><li class="aufgabe-statisch an"><span class="kaestchen" aria-hidden="true"></span>fertig</li></ul>',
+  );
   assert.equal(md('- a\n- b\n\nText danach'), '<ul><li>a</li><li>b</li></ul><p>Text danach</p>');
   assert.equal(md('• Punkt'), '<ul><li>Punkt</li></ul>');
   assert.equal(md('- a\n1. b'), '<ul><li>a</li></ul><ol><li>b</li></ol>');

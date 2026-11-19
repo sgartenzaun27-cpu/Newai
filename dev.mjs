@@ -88,5 +88,6 @@ http
   })
   .listen(PORT, () => {
     console.log(`Business-KI läuft auf http://localhost:${PORT}`);
-    if (!process.env.AI_API_KEY) console.log('Hinweis: AI_API_KEY fehlt – trag ihn in .env ein (siehe .env.example).');
+    const keys = ['GEMINI_API_KEY', 'OPENROUTER_API_KEY', 'GROQ_API_KEY', 'AI_API_KEY'];
+    if (!keys.some((k) => process.env[k])) console.log('Hinweis: Kein API-Key – trag mindestens einen in .env ein (siehe .env.example).');
   });

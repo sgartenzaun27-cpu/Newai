@@ -1,96 +1,96 @@
-# Business-KI – Prototyp
+# Business-KI
 
-Kostenlose KI für Reselling, Supplier und Shopify. Sie antwortet nach **deinen** Regeln, mit **deinem** Wissen und empfiehlt nur **deine** Angebote und Partner-Links.
+Kostenlose KI für Reseller. Sie antwortet nach **deinen** Regeln, mit **deinem** Wissen, baut Pläne zum Abhaken und empfiehlt nur **deine** Angebote: Vintage Depots, Host of Vintage, VintageHost und Badgeo.
 
 ## Was wo liegt
 
 | Datei | Was drin ist |
 | --- | --- |
-| `wissen/anweisungen.md` | Wie die KI antwortet: Ton, Format, Regeln |
-| `wissen/angebote.md` | Deine Listen und Partner-Links – nur die empfiehlt die KI |
-| `wissen/wissen.md` | Deine Erfahrung: Anleitungen, Zahlen, typische Fehler |
-| `public/config.js` | Texte der Startseite: Name, Überschrift, Beispielfragen |
+| `wissen/anweisungen.md` | Wie die KI antwortet: Ton, Format, Pläne, Regeln für Empfehlungen |
+| `wissen/angebote.md` | Deine Seiten mit Preisen und wann die KI sie empfiehlt. Telekom und Copy Trading liegen dort pausiert bereit |
+| `wissen/wissen.md` | Deine Erfahrung: Supplier, Snipen, Vinted-Sperre, Google-Badges, Shopify, TikTok |
+| `public/config.js` | Texte der Startseite, Beispielfragen und die Empfehlungs-Karten |
 | `public/` | Die Chat-Seite (HTML, CSS, JavaScript, Schriften) |
-| `api/chat.js`, `lib/ki.js` | Die Serverfunktion, die mit der KI spricht |
+| `api/chat.js`, `lib/ki.js` | Die Serverfunktion, die mit den KIs spricht |
 
 Alles in `wissen/` ist normales Deutsch – kein Code. Text in `<!-- … -->` ist nur für dich, die KI sieht ihn nicht.
 
-## Live gehen in ca. 10 Minuten
+## Was die App kann
 
-### 1. API-Key holen (OpenRouter)
+- **Pläne zum Abhaken:** Fragt jemand „Wie fange ich an?“ oder „Gib mir einen Plan“, baut die KI eine Checkliste mit Phasen, Fortschrittsring und Häkchen. Jeder Plan wird automatisch unter **Pläne** gespeichert, im Browser des Nutzers, und lässt sich als Text kopieren.
+- **Empfehlungs-Karten:** Verlinkt die KI eine deiner Seiten, erscheint unter der Antwort eine Karte mit Knopf. Links zu deinen Seiten bekommen `utm_source=business-ki`, so siehst du in deinen Shop-Statistiken, was die KI bringt.
+- **Gratis-KIs hintereinander:** Ist ein Anbieter voll, springt automatisch der nächste ein (Gemini, dann OpenRouter, dann Groq, dann dein eigener Key).
+- **Tageslimit:** 20 Fragen pro Nutzer und Tag, einstellbar.
 
-1. Auf [openrouter.ai](https://openrouter.ai) registrieren.
-2. Unter **Keys** einen neuen Key erstellen. Tipp: Gib dem Key direkt ein Ausgabenlimit (z. B. 10 $) – dann kann nie mehr ausgegeben werden, auch wenn ein Video viral geht.
-3. Guthaben aufladen (z. B. 10 $). Das Standard-Modell kostet Geld, aber sehr wenig (siehe Kosten).
+## Einrichten: Gratis-Keys eintragen
 
-Ganz ohne Guthaben testen: `AI_MODEL` auf ein Modell mit `:free` am Ende setzen (Liste auf openrouter.ai/models). Dann gilt das Gratis-Limit von OpenRouter (50 Anfragen am Tag, nach einmalig 10 $ Guthaben 1.000).
+Trag in Vercel unter **Settings → Environment Variables** die Keys ein, die du hast. Einer reicht, mehrere sind besser:
 
-### 2. Auf Vercel veröffentlichen
+| Name | Woher | Gratis-Limit (ungefähr) |
+| --- | --- | --- |
+| `GEMINI_API_KEY` | Google AI Studio → „Get API key“ | ca. 500 Fragen am Tag |
+| `OPENROUTER_API_KEY` | openrouter.ai → Keys | 50 am Tag, nach einmalig 10 $ Guthaben 1.000 |
+| `GROQ_API_KEY` | console.groq.com → API Keys | knapp, wegen Token-Limits |
 
-1. Auf [vercel.com](https://vercel.com) mit GitHub anmelden.
-2. **Add New → Project** → das Repo `newai` importieren.
-3. Bei **Environment Variables** eintragen: Name `AI_API_KEY`, Wert = dein Key.
-4. **Deploy** klicken. Nach ca. 1 Minute bekommst du deinen Link (z. B. `newai.vercel.app`).
-5. Kurz prüfen: `dein-link/api/chat` im Browser öffnen. Dort muss `"apiKeyGesetzt": true` stehen.
+Danach **Deployments → ⋯ → Redeploy**, damit die neuen Variablen greifen.
 
-Änderst du später eine Variable: **Deployments → ⋯ → Redeploy**, damit sie greift.
+Die alte Einstellung `AI_API_KEY` (mit `AI_BASE_URL` und `AI_MODEL`) funktioniert weiter. Sie wird als letzter Anbieter genutzt. Wenn du nur noch die Gratis-Keys willst, lösch sie.
 
-### 3. Dein Wissen eintragen
+Kurz prüfen: `dein-link/api/chat` im Browser öffnen. Dort stehen alle aktiven Anbieter.
 
-Direkt auf GitHub: Datei öffnen → Stift-Symbol → ändern → **Commit changes**. Vercel veröffentlicht automatisch neu (ca. 1 Minute).
-
-- Ersetze in `wissen/angebote.md` alle Links mit `PLATZHALTER` durch deine echten Links. Solange noch Platzhalter drin sind, zeigt `dein-link/api/chat` `"platzhalterInAngeboten": true`.
-- Schreib in `wissen/wissen.md` deine Erfahrung rein. Stichpunkte reichen – je konkreter, desto besser die Antworten.
-
-## Einstellungen (Environment Variables auf Vercel)
+## Weitere Einstellungen
 
 | Name | Standard | Wofür |
 | --- | --- | --- |
-| `AI_API_KEY` | – (Pflicht) | Dein API-Key |
-| `AI_MODEL` | `google/gemini-3.5-flash-lite` | Welches Modell antwortet |
 | `DAILY_LIMIT` | `20` | Fragen pro Nutzer und Tag (`0` = kein Limit) |
-| `AI_MAX_TOKENS` | `2000` | Maximale Länge einer Antwort |
-| `AI_REASONING_EFFORT` | `low` | Wie lange das Modell nachdenkt (nur OpenRouter): `low`, `medium`, `high`, `off` |
-| `AI_BASE_URL` | `https://openrouter.ai/api/v1` | Anderer Anbieter mit OpenAI-kompatibler Schnittstelle |
+| `GEMINI_MODEL` | `gemini-3.5-flash-lite` | Modell bei Gemini |
+| `OPENROUTER_MODEL` | `openrouter/free` | Modell bei OpenRouter (`openrouter/free` nimmt automatisch ein Gratis-Modell) |
+| `GROQ_MODEL` | `openai/gpt-oss-120b` | Modell bei Groq |
+| `AI_REIHENFOLGE` | `gemini,openrouter,groq,eigener` | Reihenfolge der Anbieter |
+| `AI_MAX_TOKENS` | `3000` | Maximale Länge einer Antwort |
+| `AI_REASONING_EFFORT` | `low` | Wie lange die Modelle nachdenken: `low`, `medium`, `high`, `off` |
+
+## Wissen und Angebote pflegen
+
+Direkt auf GitHub: Datei öffnen → Stift-Symbol → ändern → **Commit changes**. Vercel veröffentlicht automatisch neu (ca. 1 Minute).
+
+- **Neues Angebot:** in `wissen/angebote.md` einen Block kopieren und anpassen. Soll dafür auch eine Karte erscheinen, in `public/config.js` unter `partner` eine Zeile ergänzen.
+- **Telekom-Vertrieb und Copy Trading:** liegen in `wissen/angebote.md` pausiert bereit. Link eintragen und die Kommentar-Klammern `<!--` und `-->` um den Block entfernen.
+- **Neues Wissen:** in `wissen/wissen.md` einfach eine neue Überschrift `# Thema` mit Stichpunkten anlegen.
 
 ## Fehlercodes in der App
 
 | Meldung | Bedeutung | Was tun |
 | --- | --- | --- |
-| Fehler 401 | Key falsch | `AI_API_KEY` prüfen, neu deployen |
-| Fehler 402 | Guthaben leer oder Key-Limit erreicht | Guthaben aufladen oder Limit erhöhen |
-| Fehler 404 | Modellname falsch | `AI_MODEL` prüfen |
-| Fehler 429 | Anbieter überlastet oder Gratis-Limit voll | kurz warten oder Guthaben aufladen |
-| „AI_API_KEY fehlt“ | Variable nicht gesetzt | auf Vercel eintragen, neu deployen |
+| Fehler 429 | Alle Anbieter gerade voll | kurz warten, weiteren Gratis-Key eintragen oder Guthaben aufladen |
+| Fehler 401 / 403 | Ein Key ist falsch | Key prüfen, neu deployen |
+| Fehler 402 | Guthaben leer | Guthaben aufladen |
+| Fehler 404 | Modellname falsch | Modell-Variable prüfen |
+| „kein API-Key hinterlegt“ | Keine Keys gesetzt | auf Vercel eintragen, neu deployen |
 
 Details zu jedem Fehler stehen auf Vercel unter **Logs**.
 
 ## Kosten
 
-- **KI:** Das Standard-Modell kostet 0,30 $ pro Million Input-Tokens und 2,50 $ pro Million Output-Tokens. Grob sind das ca. 2 Cent für ein Gespräch mit 5 Fragen.
+- **KI:** Mit den Gratis-Keys kostet es nichts, solange die Limits reichen. Bezahlt kostet Gemini 3.5 Flash-Lite grob 2 Cent für ein Gespräch mit 5 Fragen.
 - **Hosting:** Der kostenlose Hobby-Plan von Vercel ist nur für private, nicht-kommerzielle Projekte gedacht. Sobald die KI Geld verdient, brauchst du Vercel Pro (20 $ im Monat).
-- **Schriften:** Archivo Black und Fira Sans liegen direkt im Projekt (Lizenz: SIL Open Font License, siehe `public/fonts/`). Es werden keine externen Dienste geladen.
 
-## Wie es funktioniert
+## Design
 
-1. Die Chat-Seite schickt die Frage (plus die letzten Nachrichten) an `/api/chat`.
-2. Die Serverfunktion baut aus `wissen/` die Anweisungen für die KI, prüft das Tageslimit und fragt das Modell.
-3. Die Antwort kommt Wort für Wort zurück und wird direkt angezeigt. Stoppt der Nutzer, stoppt auch die KI – das spart Kosten.
-
-Das Tageslimit zählt pro IP-Adresse im Speicher der Serverfunktion. Für den Test reicht das, wirklich dicht ist es erst mit einer Datenbank (siehe unten). Die Ausgabengrenze am API-Key ist deine harte Sicherung.
+Im Stil von Host of Vintage: Papier, Tinte, Bordeaux und Gold, dieselben Schriften (Archivo, Cormorant Garamond kursiv, Inter). Die Schriften liegen direkt im Projekt (Lizenz: SIL Open Font License, siehe `public/fonts/LIZENZEN.txt`). Es werden keine externen Dienste geladen.
 
 ## Lokal testen (optional)
 
 Voraussetzung: Node.js 20 oder neuer.
 
 ```bash
-cp .env.example .env   # Key eintragen
+cp .env.example .env   # Keys eintragen
 npm run dev            # http://localhost:3000
-npm test               # automatische Tests, laufen ohne echten Key
+npm test               # automatische Tests, laufen ohne echte Keys
 ```
 
 ## Nächste Schritte
 
-- Echtes Limit pro Nutzer mit Datenbank (z. B. Login per E-Mail) – baut gleichzeitig deine E-Mail-Liste auf.
-- Klicks auf Partner-Links zählen, damit du siehst, welche Empfehlung Geld bringt.
+- Pläne und Tageslimit an ein Nutzerkonto binden (Login per E-Mail) – baut gleichzeitig deine E-Mail-Liste auf.
+- Klicks auf Empfehlungs-Karten zählen.
 - Eigene Domain verbinden.
