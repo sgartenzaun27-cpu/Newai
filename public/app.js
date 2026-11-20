@@ -1,18 +1,19 @@
-// Chat-Logik der Business-KI: Fragen senden, Antworten live anzeigen,
+// Chat-Logik von Room 404: Fragen senden, Antworten live anzeigen,
 // Pläne zum Abhaken speichern und Empfehlungs-Karten zeigen.
 (() => {
   'use strict';
 
   const C = Object.assign(
     {
-      name: 'Business-KI',
-      ueberschrift: 'Was willst du',
-      ueberschriftKursiv: 'verkaufen?',
+      name: 'Room 404',
+      signal: '404',
+      ueberschrift: 'Diese Seite gibt es nicht.',
+      fluestern: '',
       untertitel: '',
       startfragen: [],
-      platzhalter: 'Frag die Business-KI …',
+      platzhalter: 'Frag Room 404 …',
       partner: [],
-      utmQuelle: 'business-ki',
+      utmQuelle: 'room404',
     },
     window.KI_CONFIG || {},
   );
@@ -33,6 +34,9 @@
     plaeneKnopf: $('.plaene-knopf'),
     zahl: $('.plaene-knopf .zahl'),
     start: $('.start'),
+    signal: $('.signal-zahl'),
+    lichtspalt: $('.lichtspalt'),
+    fluestern: $('.fluestern'),
     titel: $('#start-titel'),
     text: $('.start-text'),
     vorschlaege: $('.vorschlaege'),
@@ -189,10 +193,10 @@
       karte.href = href;
       karte.target = '_blank';
       karte.rel = 'noopener';
-      karte.innerHTML = '<span class="empfehlung-text"><strong></strong><span></span></span><span class="knopf-dunkel"></span>';
+      karte.innerHTML = '<span class="empfehlung-text"><strong></strong><span></span></span><span class="knopf-primaer"></span>';
       $('strong', karte).textContent = p.name;
       $('.empfehlung-text span', karte).textContent = p.text;
-      $('.knopf-dunkel', karte).textContent = p.knopf || 'Seite öffnen';
+      $('.knopf-primaer', karte).textContent = p.knopf || 'Seite öffnen';
       box.append(karte);
     }
     ziel.append(box);
@@ -243,7 +247,7 @@
     if (live) {
       fuss.innerHTML = '<p>Plan wird erstellt …</p>';
     } else {
-      fuss.innerHTML = `<button class="knopf-hell kopieren" type="button">${svg('kopieren')}<span>Kopieren</span></button>`;
+      fuss.innerHTML = `<button class="knopf-zweit kopieren" type="button">${svg('kopieren')}<span>Kopieren</span></button>`;
       if (!imDialog) {
         fuss.insertAdjacentHTML('beforeend', '<button class="knopf-text oeffnen" type="button">In „Meine Pläne“ öffnen</button>');
         $('.oeffnen', fuss).addEventListener('click', () => plaeneOeffnen(plan.id));
@@ -325,8 +329,8 @@
 
     if (!eintraege.length) {
       el.dialogInhalt.innerHTML =
-        '<div class="leer"><strong>Noch keine Pläne.</strong><p>Frag die KI nach einem Plan, zum Beispiel für deinen Vintage-Start. Er landet automatisch hier.</p><button class="knopf-dunkel" type="button">Plan anfragen</button></div>';
-      $('.knopf-dunkel', el.dialogInhalt).addEventListener('click', () => {
+        '<div class="leer"><strong>Noch keine Pläne.</strong><p>Frag die KI nach einem Plan, zum Beispiel für deinen Vintage-Start. Er landet automatisch hier.</p><button class="knopf-primaer" type="button">Plan anfragen</button></div>';
+      $('.knopf-primaer', el.dialogInhalt).addEventListener('click', () => {
         el.dialog.close();
         const erste = vorschlaege()[0];
         fragen(erste ? erste.frage : 'Wie fange ich mit Vintage Reselling an? Gib mir einen Plan zum Abhaken.');
@@ -365,8 +369,8 @@
     };
     const bestaetigen = () => {
       loeschen.innerHTML =
-        '<span>Wirklich löschen?</span><button class="knopf-dunkel" type="button">Löschen</button><button class="knopf-text abbrechen" type="button">Abbrechen</button>';
-      $('.knopf-dunkel', loeschen).addEventListener('click', () => {
+        '<span>Wirklich löschen?</span><button class="knopf-primaer" type="button">Löschen</button><button class="knopf-text abbrechen" type="button">Abbrechen</button>';
+      $('.knopf-primaer', loeschen).addEventListener('click', () => {
         const alle = plaeneLaden();
         delete alle[id];
         plaeneSpeichern(alle);
@@ -390,22 +394,57 @@
   // ---------------------------------------------------------------- Aufbau
 
   document.title = C.name;
-  const [markeVorne, ...markeHinten] = C.name.split('-');
-  el.marke.textContent = markeVorne;
-  if (markeHinten.length) {
-    const em = document.createElement('em');
-    em.textContent = markeHinten.join('-');
-    el.marke.append(em);
+  const markeTeile = C.name.match(/^(.*?)\s*(\d+)$/);
+  if (markeTeile) {
+    const wort = document.createElement('span');
+    wort.textContent = markeTeile[1];
+    const zahl = document.createElement('span');
+    zahl.className = 'marke-zahl';
+    zahl.textContent = markeTeile[2];
+    el.marke.replaceChildren(wort, zahl);
+  } else {
+    el.marke.textContent = C.name;
   }
 
-  el.titel.textContent = `${C.ueberschrift} `;
-  if (C.ueberschriftKursiv) {
-    const em = document.createElement('em');
-    em.textContent = C.ueberschriftKursiv;
-    el.titel.append(em);
-  }
+  const ueberschrift = [C.ueberschrift, C.ueberschriftKursiv].filter(Boolean).join(' ');
+  el.signal.textContent = C.signal || '';
+  el.signal.parentElement.hidden = !C.signal;
+  el.lichtspalt.hidden = !C.signal;
+  el.titel.textContent = ueberschrift;
+  el.fluestern.textContent = C.fluestern || '';
+  el.fluestern.hidden = !C.fluestern;
   el.text.textContent = C.untertitel;
   el.eingabe.placeholder = C.platzhalter;
+
+  // Der eine große Moment beim Betreten: die 404 geht an, die Überschrift tippt sich wie in einem Terminal.
+  function eingangAnimieren() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    el.signal.classList.add('an');
+    if (C.fluestern) el.fluestern.classList.add('wartet');
+    el.titel.style.minHeight = `${el.titel.offsetHeight}px`; // Platz für den fertigen Text freihalten
+    el.titel.setAttribute('aria-label', ueberschrift);
+    el.titel.textContent = '';
+    setTimeout(() => eintippen(el.titel, ueberschrift), 250);
+  }
+
+  function eintippen(ziel, text, dauer = 950) {
+    const start = performance.now();
+    const schritt = (jetzt) => {
+      const anteil = Math.min((jetzt - start) / dauer, 1);
+      ziel.textContent = text.slice(0, Math.round(text.length * anteil));
+      if (anteil < 1) {
+        ziel.insertAdjacentHTML('beforeend', '<span class="cursor" aria-hidden="true"></span>');
+        requestAnimationFrame(schritt);
+      } else {
+        ziel.textContent = text;
+        ziel.removeAttribute('aria-label');
+        ziel.style.minHeight = '';
+        el.fluestern.classList.add('zeigen');
+        el.fluestern.classList.remove('wartet');
+      }
+    };
+    requestAnimationFrame(schritt);
+  }
 
   function vorschlaege() {
     return (C.startfragen || []).map((f) => (typeof f === 'string' ? { titel: f, frage: f, icon: 'plan' } : f));
@@ -465,7 +504,13 @@
   }
   modus();
   zahlAktualisieren();
-  if (verlauf.length) requestAnimationFrame(nachUnten);
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (verlauf.length) {
+    requestAnimationFrame(nachUnten);
+  } else {
+    window.scrollTo(0, 0);
+    eingangAnimieren();
+  }
 
   window.addEventListener(
     'scroll',
@@ -579,7 +624,7 @@
     if (!nochmal) return;
     const knopfNochmal = document.createElement('button');
     knopfNochmal.type = 'button';
-    knopfNochmal.className = 'knopf-dunkel';
+    knopfNochmal.className = 'knopf-primaer';
     knopfNochmal.textContent = 'Nochmal senden';
     knopfNochmal.addEventListener('click', () => {
       if (laufend || limitErreicht) return;

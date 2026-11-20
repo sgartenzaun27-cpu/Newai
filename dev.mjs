@@ -1,4 +1,4 @@
-// Lokaler Testserver – nur für Entwicklung. Start: npm run dev
+// Lokaler Testserver für Room 404 – nur für Entwicklung. Start: npm run dev
 // Zeigt die Seite aus /public und leitet /api/chat an dieselbe Funktion wie auf Vercel.
 import http from 'node:http';
 import { readFile } from 'node:fs/promises';
@@ -87,7 +87,7 @@ http
     }
   })
   .listen(PORT, () => {
-    console.log(`Business-KI läuft auf http://localhost:${PORT}`);
+    console.log(`Room 404 läuft auf http://localhost:${PORT}`);
     const keys = ['GEMINI_API_KEY', 'OPENROUTER_API_KEY', 'GROQ_API_KEY', 'AI_API_KEY'];
     if (!keys.some((k) => process.env[k])) console.log('Hinweis: Kein API-Key – trag mindestens einen in .env ein (siehe .env.example).');
   });

@@ -126,7 +126,7 @@ test('streamt die Antwort als Text und baut den Prompt aus /wissen', async () =>
 
   const [system, user] = l.body.messages;
   assert.equal(system.role, 'system');
-  assert.match(system.content, /Business-KI/);
+  assert.match(system.content, /Room 404/);
   assert.match(system.content, /=== ANGEBOTE/);
   assert.match(system.content, /vintagedepots\.de/);
   assert.match(system.content, /host-of-vintage\.de/);

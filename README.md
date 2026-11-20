@@ -1,12 +1,14 @@
-# Business-KI
+# Room 404
 
-Kostenlose KI für Reseller. Sie antwortet nach **deinen** Regeln, mit **deinem** Wissen, baut Pläne zum Abhaken und empfiehlt nur **deine** Angebote: Vintage Depots, Host of Vintage, VintageHost und Badgeo.
+**Diese Seite gibt es nicht. Zumindest nicht für alle.**
+
+Room 404 ist die kostenlose KI mit dem Business-Wissen, das sonst keiner teilt. Sie antwortet nach **deinen** Regeln, mit **deinem** Wissen, baut Pläne zum Abhaken und empfiehlt nur **deine** Angebote: Vintage Depots, Host of Vintage, VintageHost und Badgeo.
 
 ## Was wo liegt
 
 | Datei | Was drin ist |
 | --- | --- |
-| `wissen/anweisungen.md` | Wie die KI antwortet: Ton, Format, Pläne, Regeln für Empfehlungen |
+| `wissen/anweisungen.md` | Wer Room 404 ist und wie die KI antwortet: Ton, Format, Pläne, Regeln für Empfehlungen |
 | `wissen/angebote.md` | Deine Seiten mit Preisen und wann die KI sie empfiehlt. Telekom und Copy Trading liegen dort pausiert bereit |
 | `wissen/wissen.md` | Deine Erfahrung: Supplier, Snipen, Vinted-Sperre, Google-Badges, Shopify, TikTok |
 | `public/config.js` | Texte der Startseite, Beispielfragen und die Empfehlungs-Karten |
@@ -18,7 +20,7 @@ Alles in `wissen/` ist normales Deutsch – kein Code. Text in `<!-- … -->` is
 ## Was die App kann
 
 - **Pläne zum Abhaken:** Fragt jemand „Wie fange ich an?“ oder „Gib mir einen Plan“, baut die KI eine Checkliste mit Phasen, Fortschrittsring und Häkchen. Jeder Plan wird automatisch unter **Pläne** gespeichert, im Browser des Nutzers, und lässt sich als Text kopieren.
-- **Empfehlungs-Karten:** Verlinkt die KI eine deiner Seiten, erscheint unter der Antwort eine Karte mit Knopf. Links zu deinen Seiten bekommen `utm_source=business-ki`, so siehst du in deinen Shop-Statistiken, was die KI bringt.
+- **Empfehlungs-Karten:** Verlinkt die KI eine deiner Seiten, erscheint unter der Antwort eine Karte mit Knopf. Links zu deinen Seiten bekommen `utm_source=room404`, so siehst du in deinen Shop-Statistiken, was Room 404 bringt.
 - **Gratis-KIs hintereinander:** Ist ein Anbieter voll, springt automatisch der nächste ein (Gemini, dann OpenRouter, dann Groq, dann dein eigener Key).
 - **Tageslimit:** 20 Fragen pro Nutzer und Tag, einstellbar.
 
@@ -73,11 +75,13 @@ Details zu jedem Fehler stehen auf Vercel unter **Logs**.
 ## Kosten
 
 - **KI:** Mit den Gratis-Keys kostet es nichts, solange die Limits reichen. Bezahlt kostet Gemini 3.5 Flash-Lite grob 2 Cent für ein Gespräch mit 5 Fragen.
-- **Hosting:** Der kostenlose Hobby-Plan von Vercel ist nur für private, nicht-kommerzielle Projekte gedacht. Sobald die KI Geld verdient, brauchst du Vercel Pro (20 $ im Monat).
+- **Hosting:** Der kostenlose Hobby-Plan von Vercel ist nur für private, nicht-kommerzielle Projekte gedacht. Sobald Room 404 Geld verdient, brauchst du Vercel Pro (20 $ im Monat).
 
 ## Design
 
-Im Stil von Host of Vintage: Papier, Tinte, Bordeaux und Gold, dieselben Schriften (Archivo, Cormorant Garamond kursiv, Inter). Die Schriften liegen direkt im Projekt (Lizenz: SIL Open Font License, siehe `public/fonts/LIZENZEN.txt`). Es werden keine externen Dienste geladen.
+Die Tür am Ende des Flurs: Petrol-Nacht als Raum, Türlicht-Amber als einziges Licht, die 404 als Leuchtschrift, die beim Betreten kurz flackert. Fira Sans für Text, JetBrains Mono für die Stimme des Raums. Die Schriften liegen direkt im Projekt (Lizenz: SIL Open Font License, siehe `public/fonts/LIZENZEN.txt`). Es werden keine externen Dienste geladen.
+
+Texte der Startseite (Überschrift, leiser Satz, Beispielfragen) änderst du in `public/config.js`.
 
 ## Lokal testen (optional)
 
@@ -91,6 +95,6 @@ npm test               # automatische Tests, laufen ohne echte Keys
 
 ## Nächste Schritte
 
+- Domain sichern (z. B. room404 mit .de oder .ai) und mit Vercel verbinden.
 - Pläne und Tageslimit an ein Nutzerkonto binden (Login per E-Mail) – baut gleichzeitig deine E-Mail-Liste auf.
 - Klicks auf Empfehlungs-Karten zählen.
-- Eigene Domain verbinden.

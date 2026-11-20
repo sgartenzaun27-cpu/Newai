@@ -1,16 +1,19 @@
 // Texte und Empfehlungen der Startseite – hier kannst du alles ändern, ohne Code anzufassen.
 // Nach dem Speichern auf GitHub ist die Änderung nach ca. 1 Minute live.
 window.KI_CONFIG = {
-  // Name oben links. Der Teil nach dem Bindestrich wird kursiv gesetzt.
-  name: 'Business-KI',
+  // Name oben links. Eine Zahl am Ende (404) wird als Leuchtschrift gesetzt.
+  name: 'Room 404',
 
-  // Große Überschrift auf der Startseite: erster Teil normal, zweiter Teil kursiv
-  ueberschrift: 'Was willst du',
-  ueberschriftKursiv: 'verkaufen?',
+  // Die große Leuchtzahl auf der Startseite
+  signal: '404',
+
+  // Überschrift und der leise Satz darunter
+  ueberschrift: 'Diese Seite gibt es nicht.',
+  fluestern: 'Zumindest nicht für alle.',
 
   // Text unter der Überschrift
   untertitel:
-    'Die kostenlose KI für Reseller. Frag nach Suppliern, Snipen, Shopify oder Google-Badges – und hol dir Pläne, die du abhaken kannst.',
+    'Room 404 ist die kostenlose KI mit dem Wissen, das sonst keiner teilt: Supplier, Snipen, Shopify, Google-Badges – und Pläne, die du abhaken kannst.',
 
   // Beispielfragen zum Antippen. icon: plan, supplier, snipe, schild, badge oder shop
   startfragen: [
@@ -23,7 +26,7 @@ window.KI_CONFIG = {
   ],
 
   // Text im leeren Eingabefeld
-  platzhalter: 'Frag die Business-KI …',
+  platzhalter: 'Frag Room 404 …',
 
   // Empfehlungs-Karten: Verlinkt die KI eine dieser Seiten, erscheint unter der Antwort eine Karte.
   partner: [
@@ -33,6 +36,6 @@ window.KI_CONFIG = {
     { domain: 'badgeo.de', name: 'Badgeo', text: 'Google-Bewertungs-Badges mit NFC im Bundle', knopf: 'Zu Badgeo' },
   ],
 
-  // Kennung in Links zu deinen Seiten – so siehst du in deinen Shop-Statistiken, was die KI bringt
-  utmQuelle: 'business-ki',
+  // Kennung in Links zu deinen Seiten – so siehst du in deinen Shop-Statistiken, was Room 404 bringt
+  utmQuelle: 'room404',
 };

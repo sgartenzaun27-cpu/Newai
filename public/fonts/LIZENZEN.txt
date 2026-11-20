@@ -1,9 +1,8 @@
-Schriften der Business-KI (dieselben wie bei Host of Vintage)
+Schriften von Room 404
 
-archivo.woff2           Archivo – Omnibus-Type
-inter.woff2             Inter – Rasmus Andersson
-cormorant-italic.woff2  Cormorant Garamond Italic – Christian Thalmann
+fira-sans-*.woff        Fira Sans – Mozilla Foundation, Telefonica S.A.
+jetbrains-mono.woff2    JetBrains Mono – JetBrains
 
-Alle drei stehen unter der SIL Open Font License 1.1:
+Beide stehen unter der SIL Open Font License 1.1:
 https://openfontlicense.org
 Sie dürfen frei genutzt, eingebettet und weitergegeben werden.
